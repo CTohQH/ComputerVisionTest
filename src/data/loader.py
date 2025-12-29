@@ -3,7 +3,9 @@ from torchvision.datasets import Flowers102
 from torch.utils.data import DataLoader, Dataset
 from .transforms import get_transforms
 
-def create_dataloaders(data_dir='./src/data', batch_size=32, num_workers=2):
+import os
+
+def create_dataloaders(data_dir='./src/data', batch_size=32, num_workers=0 if os.name == 'nt' else 2):
     """
     Creates DataLoaders for train, validation, and test sets.
     Uses the official Flowers102 splits but ensures transforms are applied.
