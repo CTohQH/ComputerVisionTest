@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Dataset (Large files)
+src/data/flowers-102/
+src/data/*.tgz
+src/data/*.mat
+
+# Models
+*.pt
+*.pth
+*.h5
+
+# OS specific
+.DS_Store
+Thumbs.db
