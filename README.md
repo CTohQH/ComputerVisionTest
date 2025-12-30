@@ -2,7 +2,7 @@
 
 This project implements an end-to-end pipeline for fine-grained image classification using the **Oxford 102 Flowers** dataset. It leverages Transfer Learning with a pre-trained **ResNet50** backbone to achieve high accuracy.
 
-## 🚀 Key Features
+##  Key Features
 
 *   **Advanced Preprocessing**: Implements **Letterboxing** (padding) to resize images to **640x640** without distortion, preserving aspect ratios.
 *   **Transfer Learning**: Fine-tunes a ResNet50 model pre-trained on ImageNet.
@@ -11,7 +11,7 @@ This project implements an end-to-end pipeline for fine-grained image classifica
 *   **Interactive Demo**: Includes a **Gradio** web interface for real-time inference on user-uploaded images.
 *   **Reproducibility**: Global seeding ensures consistent results across runs.
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 ComputerVisionTest/
@@ -60,7 +60,7 @@ ComputerVisionTest/
 2.  **Open Notebooks**: Open any notebook (e.g., `notebooks/04_Fine_Tuning.ipynb`) in Colab.
 3.  **Mount Drive**: Follow the instructions in the first cell of the notebook to mount your drive and set the project root path.
 
-## 🚦 Usage Guide
+##  Usage Guide
 
 Run the notebooks in the following order to reproduce the results:
 
@@ -70,7 +70,7 @@ Run the notebooks in the following order to reproduce the results:
 4.  **`05_Evaluation_FineTuned.ipynb`**: Evaluate the fine-tuned model using standard metrics and **Test-Time Augmentation (TTA)**.
 5.  **`06_Demo.ipynb`**: Launch the Gradio app to test the model with your own flower images.
 
-## 📊 Performance Notes
+##  Performance Notes
 
-*   **Resolution**: 640x640 (Squared with White Padding)
+*   **Resolution**: 416x416 (Squared with White Padding)
 *   **Batch Size**: Reduced to 8 for fine-tuning to prevent GPU OOM errors on standard instances (e.g., Tesla T4).
