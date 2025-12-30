@@ -13,12 +13,11 @@ venv/
 .ipynb_checkpoints
 
 # Dataset (Large files)
-src/data/flowers-102/
-src/data/*.tgz
-src/data/*.mat
+src/data/flowers-102/102flowers.tgz
+src/data/flowers-102/imagelabels.mat
+src/data/flowers-102/setid.mat
 
 # Models
-*.pt
 *.pth
 *.h5
 
