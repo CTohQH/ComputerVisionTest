@@ -1,76 +1,72 @@
 # Flower Classification with ResNet50
 
-This project implements an end-to-end pipeline for fine-grained image classification using the **Oxford 102 Flowers** dataset. It leverages Transfer Learning with a pre-trained **ResNet50** backbone to achieve high accuracy.
+This project implements an end-to-end pipeline for fine-grained image classification using the **Oxford 102 Flowers** dataset. It leverages Transfer Learning with a pre-trained **ResNet50** backbone to achieve precision in classifying 102 different flower categories.
 
-##  Key Features
+## 🚀 Key Features
 
-*   **Advanced Preprocessing**: Implements **Letterboxing** (padding) to resize images to **640x640** without distortion, preserving aspect ratios.
-*   **Transfer Learning**: Fine-tunes a ResNet50 model pre-trained on ImageNet.
-*   **Test-Time Augmentation (TTA)**: Boosts inference accuracy by averaging predictions across multiple augmented views of the same image.
-*   **Google Colab Ready**: Notebooks are pre-configured to run seamlessly in Google Colab with Drive mounting.
-*   **Interactive Demo**: Includes a **Gradio** web interface for real-time inference on user-uploaded images.
-*   **Reproducibility**: Global seeding ensures consistent results across runs.
+*   **Hybrid Architecture**: Code is structured modularly in `src/` but **inlined** within notebooks. This ensures 100% portability, allowing notebooks to run standalone in **Google Colab** (without mounting Drive) or on a local machine.
+*   **Advanced Preprocessing**: Implements a custom **Letterboxing** (padding) strategy to resize images to **640x640** while preserving aspect ratios, preventing distortion.
+*   **Transfer Learning**: Uses a **ResNet50** model pre-trained on ImageNet. The backbone is frozen to extract robust features, training only the final classification head.
+*   **Test-Time Augmentation (TTA)**: (Available in Evaluation) Boosts reliability by aggregating predictions from multiple augmented views of the same image.
+*   **Interactive Demo**: Deployment-ready demonstration using **Gradio**, allowing real-time inference on custom images.
 
-##  Project Structure
+## 📂 Project Structure
 
 ```
 ComputerVisionTest/
-├── configs/
-│   └── config.yaml             # Configuration for hyperparameters and paths
-├── notebooks/                  # Jupyter Notebooks for each stage
-│   ├── 01_EDA.ipynb            # Exploratory Data Analysis
-│   ├── 02_Training.ipynb       # Initial Training (Frozen Backbone)
-│   ├── 03_Evaluation...ipynb   # Evaluation of Initial Model
-│   ├── 04_Fine_Tuning.ipynb    # Fine-Tuning (Unfrozen Backbone)
-│   ├── 05_Evaluation_Fine...   # Final Evaluation with TTA
-│   └── 06_Demo.ipynb           # Interactive Gradio App
-├── src/                        # Source Code
-│   ├── data/
-│   │   ├── loader.py           # Data loading logic
-│   │   └── transforms.py       # Custom transforms (ResizeWithPad)
-│   ├── models/
-│   │   └── base_model.py       # ResNet50 Model definition
-│   ├── training/
-│   │   ├── trainer.py          # Training loop
-│   │   └── callbacks.py        # Early Stopping
-│   └── utils/
-│       ├── evaluation.py       # Metrics and Visualization tools
-│       └── seeds.py            # Reproducibility utilities
-├── requirements.txt            # Python dependencies
-└── README.md                   # Project Documentation
+├── notebooks/                  # Standalone Jupyter Notebooks
+│   ├── 01_EDA.ipynb            # Data download & exploration
+│   ├── 02_Training_Combined.ipynb  # End-to-end Model Training
+│   ├── 03_Evaluation_Combined.ipynb # Comprehensive Evaluation
+│   └── 04_Demo.ipynb           # Interactive Gradio App
+├── src/                        # Source Code (Reference Implementation)
+│   ├── data/                   # Dataset & Transforms
+│   ├── models/                 # ResNet definition
+│   ├── training/               # Loop & Callbacks
+│   └── utils/                  # Evaluation metrics & Seeding
+├── requirements.txt            # Dependencies
+└── README.md                   # Documentation
 ```
 
 ## 🛠️ Setup & Installation
 
-### Option 1: Local Environment
+### Option 1: Google Colab (Recommended)
+1.  **Upload** the `.ipynb` files from the `notebooks/` directory to Colab.
+2.  **Run** the cells. The notebooks are self-contained:
+    *   They automatically detect the environment.
+    *   They download the dataset directly to the Colab instance.
+    *   They define all necessary model and training logic internally.
+    *   **No separate setup or Drive mounting is required.**
 
-1.  **Clone the repository** (or unzip the project folder).
+### Option 2: Local Environment
+1.  **Clone the repository**.
 2.  **Install dependencies**:
     ```bash
     pip install -r requirements.txt
     ```
-3.  **Run Notebooks**: Start Jupyter Lab or Jupyter Notebook:
+3.  **Run Jupyter**:
     ```bash
     jupyter lab
     ```
 
-### Option 2: Google Colab
+## 🚦 Usage Guide
 
-1.  **Upload**: Upload the entire `ComputerVisionTest` folder to your Google Drive.
-2.  **Open Notebooks**: Open any notebook (e.g., `notebooks/02_Training_Combined.ipynb`) in Colab.
-3.  **Pre-upload** : Upload requirement.txt to base directory
-4.  **Setup**: Follow the instructions in the first cell of the notebook to install requirement and set the project root path.
+Execute the notebooks in the following sequence:
 
-##  Usage Guide
+1.  **`01_EDA.ipynb`**: Downloads the Oxford 102 Flowers dataset and visualizes the class distribution and image samples.
+2.  **`02_Training_Combined.ipynb`**: Trains the ResNet50 model.
+    *   Initializes the model with ImageNet weights.
+    *   Freezes the backbone.
+    *   Trains the custom head for 102 classes.
+    *   Saves the best weights to `best_model.pt`.
+3.  **`03_Evaluation_Combined.ipynb`**: Loads `best_model.pt` and performs detailed analysis.
+    *   Calculates Accuracy, F1-Score, and Confusion Matrix.
+    *   Visualizes misclassified examples for error analysis.
+4.  **`04_Demo.ipynb`**: Starts a local web server (Gradio) to upload and test images interactively.
 
-Run the notebooks in the following order to reproduce the results:
+## 📊 Technical Details
 
-1.  **`01_EDA.ipynb`**: Explore the dataset statistics and visualize sample images.
-2.  **`02_Training_Combined.ipynb`**: Train the head of the model while keeping the backbone frozen. This creates `best_model.pt`.unfreeze the backbone, and fine-tune with a lower learning rate and 640x640 resolution. This saves `best_model_finetuned.pt`.
-3.  **`03_Evaluation_Combined.ipynb`**: Evaluate both base trained model and fine_tuning model.
-5.  **`04_Demo.ipynb`**: Launch the Gradio app to test the model with your own flower images.
-
-##  Performance Notes
-
-*   **Resolution**: 416x416 (Squared with White Padding)
-*   **Batch Size**: Reduced to 8 for fine-tuning to prevent GPU OOM errors on standard instances (e.g., Tesla T4).
+*   **Model**: ResNet50 (Frozen Backbone + Linear Head)
+*   **Input Resolution**: 640x640 (Custom ResizeWithPad)
+*   **Optimization**: Adam Optimizer with ReduceLROnPlateau scheduler.
+*   **Regularization**: Early Stopping based on validation loss.
